@@ -1,0 +1,12 @@
+# 도커 관련 파일
+Dockerfile
+.dockerignore
+
+# 프로젝트 관련 파일
+node_modules
+.next
+
+# 기타 파일
+.git
+DS_Store
+README.md
