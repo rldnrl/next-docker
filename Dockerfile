@@ -26,22 +26,19 @@ RUN yarn build
 FROM node:16-alpine AS runner
 WORKDIR /app
 
-ENV NODE_ENV development
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
+ENV NODE_ENV production
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 # COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-# COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
 EXPOSE 3000
 
 ENV PORT 3000
 
-CMD ["yarn", "dev"]
+CMD ["yarn", "start"]
