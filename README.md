@@ -1,34 +1,36 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js + Docker
+## Branch
+- Development - docker-developmenet
+- Production - docker-production
 
-## Getting Started
+## 두 환경 동일하게 Docker Compose를 이용해서 빌드함.
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
+```
+$ docker-compose build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Production에서 마주쳤던 문제점
+### Docker Compose로 실행을 시킬 경우 `.next`를 못 찾는 문제가 발생
+```
+$ docker-compose up
+```
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```
+next-docker-web-1  | ready - started server on 0.0.0.0:3000, url: http://localhost:3000
+next-docker-web-1  | info  - SWC minify release candidate enabled. https://nextjs.link/swcmin
+next-docker-web-1  | Error: Could not find a production build in the '/app/.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+next-docker-web-1  |     at NextNodeServer.getBuildId (/app/node_modules/next/dist/server/next-server.js:116:23)
+next-docker-web-1  |     at new Server (/app/node_modules/next/dist/server/base-server.js:70:29)
+next-docker-web-1  |     at new NextNodeServer (/app/node_modules/next/dist/server/next-server.js:63:9)
+next-docker-web-1  |     at NextServer.createServer (/app/node_modules/next/dist/server/next.js:140:16)
+next-docker-web-1  |     at async /app/node_modules/next/dist/server/next.js:149:31
+next-docker-web-1  | error Command failed with exit code 1.
+next-docker-web-1  | info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+next-docker-web-1 exited with code 1
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## 그러나 Docker로 실행할 때는 된다.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+$ docker run -p 3000:3000 next-docker-web
+```
