@@ -34,3 +34,7 @@ next-docker-web-1 exited with code 1
 ```
 $ docker run -p 3000:3000 next-docker-web
 ```
+
+# 결론
+- 개발 환경에서는 `docker-compose`를 이용해서 개발 서버로 활용한다.
+- stage나 production 환경에서는 `docker` 명령어를 활용한다.
